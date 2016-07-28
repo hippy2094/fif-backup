@@ -9,6 +9,12 @@ uses
   fpg_editbtn, fpg_checkbox, fpg_editcombo, fpg_panel, fpg_edit, fpg_label;
 
 type
+  TFileEntry = record
+    path: String;
+    filename: String;
+    line: integer;
+    content: String;
+  end;
   TfrmMain = class(TfpgForm)
   private
     textDir: TfpgDirectoryEdit;
@@ -29,6 +35,7 @@ type
   public
     fileList: TStrings;
     procedure createFileList(mask: String; path: String; recurse: Boolean);
+    procedure scanFiles;
   end;
 
 implementation
@@ -39,6 +46,7 @@ var
   searchStr: string;
   fp: string;
 begin
+  // TODO: Check mask for multiple extensions
   fp := IncludeTrailingPathDelimiter(path);
   searchStr := fp + '*';
   if FindFirst(searchStr, faAnyFile, s) = 0 then
@@ -61,11 +69,32 @@ begin
   end;
 end;
 
+procedure TfrmMain.scanFiles;
+var
+  i: integer;
+  c: integer;
+  F: TextFile;
+  line: String;
+begin
+  for i := 0 to fileList.Count -1 do
+  begin
+    AssignFile(F,fileList[i]);
+    Reset(F);
+    c := 1;
+    while not eof(F) do
+    begin
+      Readln(F,line);
+    end;
+    CloseFile(F);
+  end;
+end;
+
 procedure TfrmMain.btnGoClick(Sender: TObject);
 begin
   fileList.Clear;
-  createFileList(textExt.Text,textDir.Directory,true);
-  writeln(fileList.Count);
+  createFileList(textExt.Text,textDir.Directory,checkRecurse.Checked);
+  //writeln(fileList.Count);
+  
 end;
 
 procedure TfrmMain.AfterCreate;
@@ -191,6 +220,7 @@ begin
     Hint := '';
     ImageName := '';
     TabOrder := 10;
+    OnClick := @btnGoClick;
   end;
   
   listResults := TfpgListView.Create(self);
