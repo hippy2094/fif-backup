@@ -14,9 +14,12 @@ type
 
   TfrmMain = class(TForm)
     btnGo: TButton;
+    btnAbout: TButton;
     checkRecurse: TCheckBox;
     checkMatchCase: TCheckBox;
     checkWholeWords: TCheckBox;
+    Label4: TLabel;
+    Panel2: TPanel;
     textSearch: TComboBox;
     Label3: TLabel;
     textExt: TComboBox;
@@ -236,6 +239,7 @@ begin
   except
     newVer := false;
   end;
+  Panel2.Visible := true;
   if newVer then
   begin
   end;
