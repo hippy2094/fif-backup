@@ -3,18 +3,15 @@ unit miscfunc;
 interface
 
 uses
-  SysUtils, Classes, base64, fpg_main, fpg_base, fpg_imgfmt_png, 
-  fphttpclient{$IFDEF MSWINDOWS}, Windows{$ENDIF};
+  SysUtils, Classes, base64, fphttpclient{$IFDEF MSWINDOWS}, Windows{$ENDIF};
 
 type
   TArray = array of string;
 
 function explode(cDelimiter,  sValue : string; iCount : integer) : TArray;  
-procedure DecodeImageData(s: String; var img: TfpgImage);
 {$IFDEF MSWINDOWS}function getWinVer: String;{$ENDIF}
 function httpGet(URL: String): String;
 
-{$I imgdata.inc}
 {$I version.inc}
 
 implementation
@@ -40,22 +37,6 @@ begin
       s :=  '';
     end;
   end;
-end;
-
-procedure DecodeImageData(s: String; var img: TfpgImage);
-var
-  decoder: TBase64DecodingStream;
-  ss: TStringStream;
-  m: TMemoryStream;
-begin
-  ss := TStringStream.Create(s);
-  decoder := TBase64DecodingStream.Create(ss);
-  m := TMemoryStream.Create;
-  m.CopyFrom(decoder,decoder.Size);
-  img := LoadImage_PNG(m);
-  decoder.Free;
-  ss.Free;
-  m.Free;
 end;
 
 {$IFDEF MSWINDOWS}
