@@ -26,8 +26,10 @@ type
     listResults: TListView;
     Panel1: TPanel;
     StatusBar1: TStatusBar;
+    updateTimer: TTimer;
     procedure btnGoClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure updateTimerTimer(Sender: TObject);
   private
     { private declarations }
     stop: Boolean;
@@ -62,7 +64,7 @@ begin
   begin
     f.LoadFromFile(appdir + 'history.txt');
     // Line 0 = file extensions
-    ext := explode('¦',f[0],0);
+    ext := explode(':',f[0],0);
     for i := 0 to High(ext) do
     begin
       textExt.Items.Add(ext[i]);
@@ -87,7 +89,7 @@ begin
   begin
     ext[i] := textExt.Items[i];
   end;
-  f.Add(implode('¦',ext));
+  f.Add(implode(':',ext));
   f.AddStrings(textSearch.Items);
   f.SaveToFile(appdir + 'history.txt');
   f.Free;
@@ -218,6 +220,25 @@ begin
   appdir :=  GetUserDir + '.fif' + PathDelim;
   if not DirectoryExists(appdir) then mkdir(appdir);
   LoadHistory;
+end;
+
+procedure TfrmMain.updateTimerTimer(Sender: TObject);
+var
+  response: String;
+  newVer: Boolean;
+begin
+  updateTimer.Enabled := false;
+  newVer := false;
+  try
+    response := httpGet('http://www.matthewhipkin.co.uk/fif.txt');
+    response := trim(response);
+    if CURRVER < StrToInt(response) then newVer := true;
+  except
+    newVer := false;
+  end;
+  if newVer then
+  begin
+  end;
 end;
 
 end.

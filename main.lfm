@@ -138,4 +138,9 @@ object frmMain: TfrmMain
     Width = 702
     Panels = <>
   end
+  object updateTimer: TTimer
+    OnTimer = updateTimerTimer
+    left = 217
+    top = 164
+  end
 end
