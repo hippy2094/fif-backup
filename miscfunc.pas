@@ -3,12 +3,13 @@ unit miscfunc;
 interface
 
 uses
-  SysUtils, Classes, base64, fphttpclient{$IFDEF MSWINDOWS}, Windows{$ENDIF};
+  SysUtils, Classes, base64, StrUtils, fphttpclient{$IFDEF MSWINDOWS}, Windows{$ENDIF};
 
 type
   TArray = array of string;
 
-function explode(cDelimiter,  sValue : string; iCount : integer) : TArray;  
+function explode(cDelimiter,  sValue : string; iCount : integer) : TArray;
+function implode(cDelimiter: String; arr: TArray): String;
 {$IFDEF MSWINDOWS}function getWinVer: String;{$ENDIF}
 function httpGet(URL: String): String;
 
@@ -37,6 +38,18 @@ begin
       s :=  '';
     end;
   end;
+end;
+
+function implode(cDelimiter: String; arr: TArray): String;
+var
+  i: integer;
+begin
+  Result := '';
+  for i := Low(arr) to High(arr) do
+  begin
+    Result := Result + arr[i] + cDelimiter;
+  end;
+  Result := TrimRightSet(Result,[' ',cDelimiter[1]]);
 end;
 
 {$IFDEF MSWINDOWS}

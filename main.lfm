@@ -112,17 +112,14 @@ object frmMain: TfrmMain
     Align = alClient
     Columns = <    
       item
-        AutoSize = True
         Caption = 'Filename'
-        Width = 60
+        Width = 100
       end    
       item
-        AutoSize = True
         Caption = 'Path'
         Width = 36
       end    
       item
-        AutoSize = True
         Caption = 'Line Number'
         Width = 81
       end    
