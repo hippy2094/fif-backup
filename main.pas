@@ -28,13 +28,32 @@ type
     procedure createFileList(mask: String; path: String; recurse: Boolean);
     procedure scanFiles;
     procedure addFind(line: integer; filename: string; content: string; matchedword: String);
-    procedure btnGoClick(Sender: TObject);
+    procedure LoadHistory;
+    procedure SaveHistory;
+    procedure btnGoClick(Sender: TObject);    
   public
     fileList: TStrings;
     procedure AfterCreate; override;
   end;
 
 implementation
+
+procedure TfrmMain.LoadHistory;
+var
+  f: TStrings;
+begin
+  // Line 0 = file extensions
+  f := TStringList.Create;
+  f.Free;
+end;
+
+procedure TfrmMain.SaveHistory;
+var
+  f: TStrings;
+begin
+  f := TStringList.Create;
+  f.Free;
+end;
 
 procedure TfrmMain.createFileList(mask: String; path: String; recurse: Boolean);
 var
@@ -161,7 +180,7 @@ var
 begin
   Name := 'frmMain';
   SetPosition(422, 153, 567, 331);
-  WindowTitle := 'frmMain';
+  WindowTitle := APPNAME + ' ' + APPVER;
   Hint := '';
   IconName := '';
 

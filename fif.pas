@@ -1,12 +1,8 @@
 program fif;
 {mode objfpc}{$H+}
 
-uses SysUtils, Classes, fpg_base, fpg_main, fpg_stylemanager, fpg_style_win8, main;
-
-const
-  APPNAME = 'easyfinder';
-  APPVER = '0.1';
-  CURRVER = 20160727;
+uses SysUtils, Classes, fpg_base, fpg_main, fpg_stylemanager, miscfunc,
+  fpg_style_win8, main;
 
 procedure main;
 var
@@ -15,7 +11,13 @@ var
   progicon: TfpgImage;
 begin
   fpgApplication.Initialize;
-  if fpgStyleManager.SetStyle('win8') then fpgStyle := fpgStyleManager.Style;
+  if fpgStyleManager.SetStyle('Carbon') then fpgStyle := fpgStyleManager.Style;
+  sfimg := TfpgImage.Create;
+  DecodeImageData(sflogo,sfimg);
+  progicon := TfpgImage.Create;
+  DecodeImageData(appicon,progicon);
+  fpgImages.AddImage('sflogo',sfimg);
+  fpgImages.AddImage('appicon',progicon);  
   frm := TfrmMain.Create(nil);
   try
     frm.Show;

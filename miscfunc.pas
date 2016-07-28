@@ -3,12 +3,16 @@ unit miscfunc;
 interface
 
 uses
-  SysUtils, Classes;
+  SysUtils, Classes, base64, fpg_main, fpg_base, fpg_imgfmt_png;
 
 type
   TArray = array of string;
 
 function explode(cDelimiter,  sValue : string; iCount : integer) : TArray;  
+procedure DecodeImageData(s: String; var img: TfpgImage);
+
+{$I imgdata.inc}
+{$I version.inc}
 
 implementation
 
@@ -33,6 +37,22 @@ begin
       s :=  '';
     end;
   end;
+end;
+
+procedure DecodeImageData(s: String; var img: TfpgImage);
+var
+  decoder: TBase64DecodingStream;
+  ss: TStringStream;
+  m: TMemoryStream;
+begin
+  ss := TStringStream.Create(s);
+  decoder := TBase64DecodingStream.Create(ss);
+  m := TMemoryStream.Create;
+  m.CopyFrom(decoder,decoder.Size);
+  img := LoadImage_PNG(m);
+  decoder.Free;
+  ss.Free;
+  m.Free;
 end;
 
 end.
