@@ -1,4 +1,4 @@
 const
   APPNAME = 'fif';
-  APPVER = '0.1';
-  CURRVER = 20160727;
+  APPVER = '0.2';
+  CURRVER = 20160728;

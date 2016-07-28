@@ -222,6 +222,8 @@ begin
   frmMain.Caption := APPNAME + ' ' + APPVER;
   Application.Title := APPNAME;
   appdir :=  GetUserDir + '.fif' + PathDelim;
+  textExt.Text := '';
+  textSearch.Text := '';
   if not DirectoryExists(appdir) then mkdir(appdir);
   LoadHistory;
 end;

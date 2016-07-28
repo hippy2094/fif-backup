@@ -19,15 +19,15 @@ object frmMain: TfrmMain
     TabOrder = 0
     object Label1: TLabel
       Left = 16
-      Height = 15
+      Height = 14
       Top = 8
-      Width = 48
+      Width = 58
       Caption = 'Directory'
       ParentColor = False
     end
     object textDir: TDirectoryEdit
       Left = 16
-      Height = 23
+      Height = 20
       Top = 24
       Width = 176
       ShowHidden = False
@@ -38,35 +38,35 @@ object frmMain: TfrmMain
     end
     object Label2: TLabel
       Left = 208
-      Height = 15
+      Height = 14
       Top = 8
-      Width = 51
+      Width = 59
       Caption = 'File Types'
       ParentColor = False
     end
     object textExt: TComboBox
       Left = 208
-      Height = 23
+      Height = 20
       Top = 24
       Width = 100
-      ItemHeight = 15
+      ItemHeight = 14
       TabOrder = 1
       Text = 'textExt'
     end
     object textSearch: TComboBox
       Left = 320
-      Height = 23
+      Height = 20
       Top = 24
       Width = 368
-      ItemHeight = 15
+      ItemHeight = 14
       TabOrder = 2
       Text = 'textSearch'
     end
     object Label3: TLabel
       Left = 320
-      Height = 15
+      Height = 14
       Top = 8
-      Width = 59
+      Width = 72
       Caption = 'Search Text'
       ParentColor = False
     end
@@ -74,7 +74,7 @@ object frmMain: TfrmMain
       Left = 16
       Height = 19
       Top = 56
-      Width = 139
+      Width = 170
       Caption = 'Recurse Subdirectories'
       TabOrder = 3
     end
@@ -82,7 +82,7 @@ object frmMain: TfrmMain
       Left = 208
       Height = 19
       Top = 56
-      Width = 82
+      Width = 97
       Caption = 'Match Case'
       TabOrder = 4
     end
@@ -90,7 +90,7 @@ object frmMain: TfrmMain
       Left = 320
       Height = 19
       Top = 56
-      Width = 128
+      Width = 147
       Caption = 'Match Whole Words'
       TabOrder = 5
     end
@@ -140,7 +140,7 @@ object frmMain: TfrmMain
   end
   object listResults: TListView
     Left = 0
-    Height = 384
+    Height = 388
     Top = 88
     Width = 828
     Align = alClient
@@ -160,15 +160,15 @@ object frmMain: TfrmMain
       item
         AutoSize = True
         Caption = 'Line Content'
-        Width = 521
+        Width = 100
       end>
     TabOrder = 1
     ViewStyle = vsReport
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 23
-    Top = 472
+    Height = 19
+    Top = 476
     Width = 828
     Panels = <>
   end
