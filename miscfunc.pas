@@ -7,13 +7,6 @@ uses
 
 type
   TArray = array of string;
-  PFileEntry = ^TFileEntry;
-  TFileEntry = record
-    path: String;
-    filename: String;
-    line: integer;
-    content: String;
-  end;  
 
 function explode(cDelimiter,  sValue : string; iCount : integer) : TArray;  
 

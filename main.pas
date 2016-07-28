@@ -126,13 +126,19 @@ end;
 
 procedure TfrmMain.addFind(line: integer; filename: string; content: string; matchedword: String);
 var
-  t: TStrings;
+  //t: TStrings;
+  Item: TfpgLVItem;
 begin
-  t := TStringList.Create;
+  {t := TStringList.Create;
   if FileExists('debug.txt') then t.LoadFromFile('debug.txt');
   t.Add(IntToStr(line)+','+filename+','+content+','+matchedword);
   t.SaveToFile('debug.txt');
-  t.Free;
+  t.Free;}
+  Item := listResults.ItemAdd;
+  Item.Caption := ExtractFileName(filename);
+  Item.SubItems.Add(ExtractFilePath(filename));
+  Item.SubItems.Add(IntToStr(line));
+  Item.SubItems.Add(content);  
 end;
 
 procedure TfrmMain.btnGoClick(Sender: TObject);
