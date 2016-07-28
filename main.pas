@@ -79,30 +79,45 @@ begin
   begin
     AssignFile(F,fileList[i]);
     Reset(F);
-    c := 1;
+    c := 0;
     while not eof(F) do
     begin
       Readln(F,line);
+      inc(c);
       if checkWholeWords.Checked then
       begin
-	words := explode(' ',line,0);
-	for j := Low(words) to High(words) do
-	begin
-	  for x := Low(sWords) to High(sWords) do
-	  begin
-	    if checkMatchCase.Checked = true then
+	    words := explode(' ',line,0);
+	    for j := Low(words) to High(words) do
 	    begin
-	      if sWords[x] = words[j] then addFind(c,fileList[i],line,sWords[x]);
-	    end
-	    else
-	    begin
-	      if Lowercase(sWords[x]) = Lowercase(words[j]) then addFind(c,fileList[i],line,sWords[x]);
+	      for x := Low(sWords) to High(sWords) do
+	      begin
+	        if checkMatchCase.Checked = true then
+	        begin
+	          if sWords[x] = words[j] then addFind(c,fileList[i],line,sWords[x]);
+	        end
+	        else
+	        begin
+	          if Lowercase(sWords[x]) = Lowercase(words[j]) then addFind(c,fileList[i],line,sWords[x]);
+	        end;
+	      end;
 	    end;
-	  end;
-	end;
       end
       else
       begin
+        if checkMatchCase.Checked = true then
+        begin
+          for x := Low(sWords) to High(sWords) do
+          begin
+            if AnsiPos(sWords[x],line) > 0 then addFind(c,fileList[i],line,sWords[x]);
+          end;
+        end
+        else
+        begin
+          for x := Low(sWords) to High(sWords) do
+          begin
+            if AnsiPos(Lowercase(sWords[x]),Lowercase(line)) > 0 then addFind(c,fileList[i],line,sWords[x]);
+          end;        
+        end;
       end;
     end;
     CloseFile(F);
@@ -110,15 +125,21 @@ begin
 end;
 
 procedure TfrmMain.addFind(line: integer; filename: string; content: string; matchedword: String);
+var
+  t: TStrings;
 begin
+  t := TStringList.Create;
+  if FileExists('debug.txt') then t.LoadFromFile('debug.txt');
+  t.Add(IntToStr(line)+','+filename+','+content+','+matchedword);
+  t.SaveToFile('debug.txt');
+  t.Free;
 end;
 
 procedure TfrmMain.btnGoClick(Sender: TObject);
 begin
   fileList.Clear;
   createFileList(textExt.Text,textDir.Directory,checkRecurse.Checked);
-  //writeln(fileList.Count);
-  
+  if fileList.Count > 0 then scanFiles;  
 end;
 
 procedure TfrmMain.AfterCreate;
