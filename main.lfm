@@ -1,0 +1,35 @@
+object Form1: TForm1
+  Left = 238
+  Height = 505
+  Top = 166
+  Width = 736
+  Caption = 'Form1'
+  ClientHeight = 505
+  ClientWidth = 736
+  LCLVersion = '1.7'
+  object Panel1: TPanel
+    Left = 0
+    Height = 100
+    Top = 0
+    Width = 736
+    Align = alTop
+    Caption = 'Panel1'
+    TabOrder = 0
+  end
+  object ListView1: TListView
+    Left = 0
+    Height = 382
+    Top = 100
+    Width = 736
+    Align = alClient
+    Columns = <>
+    TabOrder = 1
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Height = 23
+    Top = 482
+    Width = 736
+    Panels = <>
+  end
+end
