@@ -3,13 +3,16 @@ unit miscfunc;
 interface
 
 uses
-  SysUtils, Classes, base64, fpg_main, fpg_base, fpg_imgfmt_png;
+  SysUtils, Classes, base64, fpg_main, fpg_base, fpg_imgfmt_png, 
+  fphttpclient{$IFDEF MSWINDOWS}, Windows{$ENDIF};
 
 type
   TArray = array of string;
 
 function explode(cDelimiter,  sValue : string; iCount : integer) : TArray;  
 procedure DecodeImageData(s: String; var img: TfpgImage);
+{$IFDEF MSWINDOWS}function getWinVer: String;{$ENDIF}
+function httpGet(URL: String): String;
 
 {$I imgdata.inc}
 {$I version.inc}
@@ -53,6 +56,44 @@ begin
   decoder.Free;
   ss.Free;
   m.Free;
+end;
+
+{$IFDEF MSWINDOWS}
+function getWinVer: String;
+var
+  VerInfo: TOSVersioninfo;
+  nt: String;
+begin
+  nt := '';
+  VerInfo.dwOSVersionInfoSize := SizeOf(TOSVersionInfo);
+  GetVersionEx(VerInfo);
+  if VerInfo.dwPlatformId = VER_PLATFORM_WIN32_NT then nt := 'NT ';
+  Result := 'Windows '+nt+IntToStr(VerInfo.dwMajorVersion) + '.' + IntToStr(VerInfo.dwMinorVersion);
+end;
+{$ENDIF}
+
+function httpGet(URL: String): String;
+var
+  HTTP: TFPHttpClient;
+  OS: String;
+begin
+  {$ifdef Windows}
+  OS := getWinVer;
+  {$endif}
+  {$ifdef Linux}
+  OS := 'Linux';
+  {$endif}
+  {$ifdef FreeBSD}
+  OS := 'FreeBSD';
+  {$endif}
+  {$ifdef Darwin}
+  OS := 'OSX';
+  {$endif}
+  Result := '';
+  HTTP := TFPHttpClient.Create(nil);
+  HTTP.RequestHeaders.Add('User-Agent: Mozilla/5.0 (compatible; '+OS+'; '+APPNAME+' '+APPVER+' ('+IntToStr(CURRVER)+'))');
+  Result := HTTP.Get(URL);
+  HTTP.Free;
 end;
 
 end.
