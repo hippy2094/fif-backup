@@ -109,6 +109,7 @@ object frmMain: TfrmMain
       Top = 56
       Width = 75
       Caption = 'About'
+      OnClick = btnAboutClick
       TabOrder = 7
     end
     object Panel2: TPanel

@@ -30,6 +30,7 @@ type
     Panel1: TPanel;
     StatusBar1: TStatusBar;
     updateTimer: TTimer;
+    procedure btnAboutClick(Sender: TObject);
     procedure btnGoClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Label4Click(Sender: TObject);
@@ -52,6 +53,8 @@ var
   frmMain: TfrmMain;
 
 implementation
+
+uses about;
 
 {$R *.lfm}
 
@@ -214,6 +217,11 @@ begin
   textExt.Items.Add(textExt.Text);
   textSearch.Items.Add(textSearch.Text);
   SaveHistory;
+end;
+
+procedure TfrmMain.btnAboutClick(Sender: TObject);
+begin
+  frmAbout.ShowModal;
 end;
 
 procedure TfrmMain.FormCreate(Sender: TObject);
