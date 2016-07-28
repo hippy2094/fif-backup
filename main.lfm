@@ -134,6 +134,7 @@ object frmMain: TfrmMain
         Layout = tlCenter
         ParentColor = False
         ParentFont = False
+        OnClick = Label4Click
       end
     end
   end

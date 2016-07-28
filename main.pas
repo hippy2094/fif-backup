@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  ComCtrls, StdCtrls, EditBtn, miscfunc;
+  ComCtrls, StdCtrls, EditBtn, miscfunc, LCLIntF;
 
 type
 
@@ -32,6 +32,7 @@ type
     updateTimer: TTimer;
     procedure btnGoClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure Label4Click(Sender: TObject);
     procedure updateTimerTimer(Sender: TObject);
   private
     { private declarations }
@@ -225,6 +226,11 @@ begin
   LoadHistory;
 end;
 
+procedure TfrmMain.Label4Click(Sender: TObject);
+begin
+  OpenURL('http://www.matthewhipkin.co.uk');
+end;
+
 procedure TfrmMain.updateTimerTimer(Sender: TObject);
 var
   response: String;
@@ -239,9 +245,9 @@ begin
   except
     newVer := false;
   end;
-  Panel2.Visible := true;
   if newVer then
   begin
+    Panel2.Visible := true;
   end;
 end;
 
