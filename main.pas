@@ -6,15 +6,10 @@ interface
 
 uses
   SysUtils, Classes, fpg_base, fpg_main, fpg_form, fpg_button, fpg_listview, 
-  fpg_editbtn, fpg_checkbox, fpg_editcombo, fpg_panel, fpg_edit, fpg_label;
+  fpg_editbtn, fpg_checkbox, fpg_editcombo, fpg_panel, fpg_edit, fpg_label,
+  miscfunc;
 
 type
-  TFileEntry = record
-    path: String;
-    filename: String;
-    line: integer;
-    content: String;
-  end;
   TfrmMain = class(TfpgForm)
   private
     textDir: TfpgDirectoryEdit;
@@ -30,12 +25,13 @@ type
     Label2: TfpgLabel;
     Label3: TfpgLabel;
     stop: Boolean;
-    procedure AfterCreate; override;
+    procedure createFileList(mask: String; path: String; recurse: Boolean);
+    procedure scanFiles;
+    procedure addFind(line: integer; filename: string; content: string; matchedword: String);
     procedure btnGoClick(Sender: TObject);
   public
     fileList: TStrings;
-    procedure createFileList(mask: String; path: String; recurse: Boolean);
-    procedure scanFiles;
+    procedure AfterCreate; override;
   end;
 
 implementation
@@ -71,11 +67,14 @@ end;
 
 procedure TfrmMain.scanFiles;
 var
-  i: integer;
+  i,j,x: integer;
   c: integer;
   F: TextFile;
   line: String;
+  words: TArray;
+  sWords: TArray;
 begin
+  sWords := explode(' ',textSearch.Text,0);
   for i := 0 to fileList.Count -1 do
   begin
     AssignFile(F,fileList[i]);
@@ -84,9 +83,34 @@ begin
     while not eof(F) do
     begin
       Readln(F,line);
+      if checkWholeWords.Checked then
+      begin
+	words := explode(' ',line,0);
+	for j := Low(words) to High(words) do
+	begin
+	  for x := Low(sWords) to High(sWords) do
+	  begin
+	    if checkMatchCase.Checked = true then
+	    begin
+	      if sWords[x] = words[j] then addFind(c,fileList[i],line,sWords[x]);
+	    end
+	    else
+	    begin
+	      if Lowercase(sWords[x]) = Lowercase(words[j]) then addFind(c,fileList[i],line,sWords[x]);
+	    end;
+	  end;
+	end;
+      end
+      else
+      begin
+      end;
     end;
     CloseFile(F);
   end;
+end;
+
+procedure TfrmMain.addFind(line: integer; filename: string; content: string; matchedword: String);
+begin
 end;
 
 procedure TfrmMain.btnGoClick(Sender: TObject);
