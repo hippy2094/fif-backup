@@ -7,7 +7,7 @@ interface
 uses
   SysUtils, Classes, fpg_base, fpg_main, fpg_form, fpg_button, fpg_listview, 
   fpg_editbtn, fpg_checkbox, fpg_editcombo, fpg_panel, fpg_edit, fpg_label,
-  miscfunc;
+  fpg_dialogs, miscfunc;
 
 type
   TfrmMain = class(TfpgForm)
@@ -142,10 +142,18 @@ begin
 end;
 
 procedure TfrmMain.btnGoClick(Sender: TObject);
+var
+  f: TfpgMessageBox;
 begin
   fileList.Clear;
   createFileList(textExt.Text,textDir.Directory,checkRecurse.Checked);
   if fileList.Count > 0 then scanFiles;  
+  f := TfpgMessageBox.Create(nil);
+  f.WindowTitle := 'Done';
+  f.CentreText := true;
+  f.SetMessage('Complete' + LineEnding + IntToStr(listResults.Items.Count) + ' results');
+  f.ShowModal;
+  f.Free;
 end;
 
 procedure TfrmMain.AfterCreate;
