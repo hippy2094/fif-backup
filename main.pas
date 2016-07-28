@@ -41,8 +41,10 @@ var
   s: TSearchRec;
   searchStr: string;
   fp: string;
+  masks: TArray;
+  i: integer;
 begin
-  // TODO: Check mask for multiple extensions
+  masks := explode(';',mask,0);  
   fp := IncludeTrailingPathDelimiter(path);
   searchStr := fp + '*';
   if FindFirst(searchStr, faAnyFile, s) = 0 then
@@ -51,9 +53,12 @@ begin
       if stop = true then exit;
       if (s.Attr and faDirectory) <> faDirectory then
       begin
-        if ExtractFileExt(s.Name) = ExtractFileExt(mask) then
-	begin
-	  fileList.Add(fp + s.Name);
+        for i := Low(masks) to High(masks) do
+        begin
+          if ExtractFileExt(s.Name) = ExtractFileExt(trim(masks[i])) then
+	      begin
+	        fileList.Add(fp + s.Name);
+          end;        
         end;
       end
       else
@@ -126,14 +131,8 @@ end;
 
 procedure TfrmMain.addFind(line: integer; filename: string; content: string; matchedword: String);
 var
-  //t: TStrings;
   Item: TfpgLVItem;
 begin
-  {t := TStringList.Create;
-  if FileExists('debug.txt') then t.LoadFromFile('debug.txt');
-  t.Add(IntToStr(line)+','+filename+','+content+','+matchedword);
-  t.SaveToFile('debug.txt');
-  t.Free;}
   Item := listResults.ItemAdd;
   Item.Caption := ExtractFileName(filename);
   Item.SubItems.Add(ExtractFilePath(filename));
