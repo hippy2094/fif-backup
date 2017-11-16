@@ -3,7 +3,7 @@ unit miscfunc;
 interface
 
 uses
-  SysUtils, Classes, base64, StrUtils, fphttpclient{$IFDEF MSWINDOWS}, Windows{$ENDIF};
+  SysUtils, Classes, StrUtils, fphttpclient{$IFDEF MSWINDOWS}, Windows{$ENDIF};
 
 type
   TArray = array of string;
@@ -12,6 +12,7 @@ function explode(cDelimiter,  sValue : string; iCount : integer) : TArray;
 function implode(cDelimiter: String; arr: TArray): String;
 {$IFDEF MSWINDOWS}function getWinVer: String;{$ENDIF}
 function httpGet(URL: String): String;
+function InTStrings(sText: String; arr: TStrings): Boolean;
 
 {$I version.inc}
 
@@ -88,6 +89,17 @@ begin
   HTTP.RequestHeaders.Add('User-Agent: Mozilla/5.0 (compatible; '+OS+'; '+APPNAME+' '+APPVER+' ('+IntToStr(CURRVER)+'))');
   Result := HTTP.Get(URL);
   HTTP.Free;
+end;
+
+function InTStrings(sText: String; arr: TStrings): Boolean;
+var
+  i: Integer;
+begin
+  Result := false;
+  for i := 0 to arr.Count -1 do
+  begin
+    if sText = arr[i] then Result := true;
+  end;
 end;
 
 end.
