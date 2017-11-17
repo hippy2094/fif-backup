@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  ComCtrls, StdCtrls, EditBtn, LCLIntF, miscfunc, scanthread;
+  ComCtrls, StdCtrls, EditBtn, LCLIntF, StrUtils, MD_Label, miscfunc, scanthread;
 
 type
 
@@ -20,13 +20,13 @@ type
     checkWholeWords: TCheckBox;
     Label4: TLabel;
     Panel2: TPanel;
+    ScrollBox1: TScrollBox;
     textSearch: TComboBox;
     Label3: TLabel;
     textExt: TComboBox;
     textDir: TDirectoryEdit;
     Label1: TLabel;
     Label2: TLabel;
-    listResults: TListView;
     Panel1: TPanel;
     StatusBar1: TStatusBar;
     updateTimer: TTimer;
@@ -34,6 +34,9 @@ type
     procedure btnGoClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Label4Click(Sender: TObject);
+    procedure ResultLabelMouseLeave(Sender: TObject);
+    procedure ResultLabelMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer
+      );
     procedure updateTimerTimer(Sender: TObject);
   private
     { private declarations }
@@ -103,13 +106,39 @@ end;
 
 procedure TfrmMain.scannerOnTextFound(r: TScanResult);
 var
-  Item: TListItem;
+  l: TMDLabel;
+  html: TStrings;
+  mt: String;
 begin
-  Item := listResults.Items.Add;
-  Item.Caption := ExtractFileName(r.FileName);
-  Item.SubItems.Add(ExtractFilePath(r.FileName));
-  Item.SubItems.Add(IntToStr(r.LineNumber));
-  Item.SubItems.Add(r.LineText);
+  html := TStringList.Create;
+  html.Add('<fs:10><fs:12><t>'+ExtractFilename(r.FileName)+'</fs><t:300>Line: '+IntToStr(r.LineNumber)+'<br>');
+  html.Add('<t>'+ExtractFilePath(r.FileName)+'<br><br>');
+  mt := r.LineText;
+  mt.Replace('&','&amp;');
+  mt.Replace('<','&lt;');
+  mt.Replace('>','&gt;');
+  mt := AnsiReplaceStr(mt,r.MatchedText,'<b>' + r.MatchedText + '</b>');
+  html.Add('<t>'+mt+'<br></fs>');
+  l := TMDLabel.Create(Self);
+  l.ParentFont := true;
+  l.Color := clWhite;
+  l.Parent := ScrollBox1;
+  l.AutoSizeHeight:=true;
+  l.AutoSizeWidth:=false;
+  l.Width := ScrollBox1.ClientWidth;
+  l.Top := 0;
+  l.Left := 0;
+  l.BorderStyle := bsNone;
+  l.BorderWidth := 0;
+  l.CompressSpaces := false;
+  l.Caption := html.Text;
+  l.Visible := true;
+  l.Align := alTop;
+  l.BorderStyle := bsSingle;
+  l.BorderWidth := 1;
+  l.OnMouseMove := @ResultLabelMouseMove;
+  l.OnMouseLeave := @ResultLabelMouseLeave;
+  html.Free;
 end;
 
 procedure TfrmMain.scannerOnUpdateCount(fc: Integer; rc: Integer);
@@ -121,12 +150,32 @@ end;
 procedure TfrmMain.scannerOnTerminate(Sender: TObject);
 begin
   showmessage('Done');
-  StatusBar1.SimpleText := IntToStr(listResults.Items.Count) + ' results';
+//  StatusBar1.SimpleText := IntToStr(listResults.Items.Count) + ' results';
   textExt.Items.Add(textExt.Text);
   textSearch.Items.Add(textSearch.Text);
   SaveHistory;
   scanner.Free;
 end;
+
+procedure TfrmMain.ResultLabelMouseLeave(Sender: TObject);
+begin
+  if Sender is TMDLabel then
+  begin
+    if (Sender as TMDLabel).Color = clActiveCaption then
+      (Sender as TMDLabel).Color := clWhite;
+  end;
+end;
+
+procedure TfrmMain.ResultLabelMouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+  if Sender is TMDLabel then
+  begin
+    if (Sender as TMDLabel).Color = clWhite then
+      (Sender as TMDLabel).Color := clActiveCaption;
+  end;
+end;
+
 
 procedure TfrmMain.btnGoClick(Sender: TObject);
 var

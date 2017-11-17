@@ -139,39 +139,22 @@ object frmMain: TfrmMain
       end
     end
   end
-  object listResults: TListView
-    Left = 0
-    Height = 384
-    Top = 88
-    Width = 828
-    Align = alClient
-    Columns = <    
-      item
-        Caption = 'Filename'
-        Width = 100
-      end    
-      item
-        Caption = 'Path'
-        Width = 36
-      end    
-      item
-        Caption = 'Line Number'
-        Width = 81
-      end    
-      item
-        AutoSize = True
-        Caption = 'Line Content'
-        Width = 83
-      end>
-    TabOrder = 1
-    ViewStyle = vsReport
-  end
   object StatusBar1: TStatusBar
     Left = 0
     Height = 23
     Top = 472
     Width = 828
     Panels = <>
+  end
+  object ScrollBox1: TScrollBox
+    Left = 0
+    Height = 384
+    Top = 88
+    Width = 828
+    HorzScrollBar.Page = 1
+    VertScrollBar.Page = 1
+    Align = alClient
+    TabOrder = 2
   end
   object updateTimer: TTimer
     OnTimer = updateTimerTimer
