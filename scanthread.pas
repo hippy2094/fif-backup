@@ -21,17 +21,19 @@ type
     MatchCase: Boolean;
     WordMode: TWordMode;
   end;
-  TUpdateCountEvent = procedure(c: Integer) of Object;
+  TUpdateCountEvent = procedure(fc: Integer; rc: Integer) of Object;
   TTextFoundEvent = procedure(r: TScanResult) of Object;
   TScanThread = class(TThread)
     private
-      FCurrentIndex: Integer;
       FOnUpdateCount: TUpdateCountEvent;
       FOnTextFound: TTextFoundEvent;
       FScanOptions: TScanOptions;
       FScanDirectories: TStrings;
       FFileTypes: TStrings;
       FLastFileResult: TScanResult;
+      FFilesCounted: Integer;
+      FResultsFound: Integer;
+      FCurrentPath: String;
       procedure PerformScan;
       procedure UpdateCount;
       procedure TextFound;
@@ -48,6 +50,7 @@ type
       procedure AddDirectory(dir: String);
       procedure AddFileType(f: String);
       procedure SetOptions(o: TScanOptions);
+      property CurrentPath: String read FCurrentPath;
       property ScanOptions: TScanOptions read FScanOptions write FScanOptions;
       property OnUpdateCount: TUpdateCountEvent read FOnUpdateCount write FOnUpdateCount;
       property OnTextFound: TTextFoundEvent read FOnTextFound write FOnTextFound;
@@ -58,7 +61,8 @@ implementation
 { TScanThread }
 constructor TScanThread.Create(CreateSuspended: Boolean);
 begin
-  FCurrentIndex := 0;
+  FFilesCounted := 0;
+  FResultsFound := 0;
   FScanDirectories := TStringList.Create;
   FFileTypes := TStringList.Create;
   HasFinished := false;
@@ -90,6 +94,7 @@ var
   masks: TArray;
   i: integer;
 begin
+  FCurrentPath := path;
   masks := explode(';',mask,0);
   fp := IncludeTrailingPathDelimiter(path);
   searchStr := fp + '*';
@@ -103,6 +108,7 @@ begin
         begin
           if ExtractFileExt(s.Name) = ExtractFileExt(trim(masks[i])) then
 	  begin
+            inc(FFilesCounted);
 	    ScanFile(fp + s.Name);
           end;
         end;
@@ -112,6 +118,7 @@ begin
         if (s.Name <> '.') and (s.Name <> '..') and (FScanOptions.Recursive) then
           createFileList(mask,fp + s.Name);
       end;
+      Synchronize(@UpdateCount);
     until FindNext(s) <> 0;
   end;
 end;
@@ -119,6 +126,7 @@ end;
 procedure TScanThread.AddFind(line: integer; filename: string; content: string;
   matchedword: String);
 begin
+  inc(FResultsFound);
   FLastFileResult.FileName := filename;
   FLastFileResult.LineNumber := line;
   FLastFileResult.MatchedText := matchedword;
@@ -222,7 +230,7 @@ procedure TScanThread.UpdateCount;
 begin
   if Assigned(FOnUpdateCount) then
   begin
-    FOnUpdateCount(FCurrentIndex);
+    FOnUpdateCount(FFilesCounted, FResultsFound);
   end;
 end;
 

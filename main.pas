@@ -37,13 +37,13 @@ type
     procedure updateTimerTimer(Sender: TObject);
   private
     { private declarations }
-    stop: Boolean;
     appdir: String;
     scanner: TScanThread;
     procedure LoadHistory;
     procedure SaveHistory;
     procedure scannerOnTextFound(r: TScanResult);
     procedure scannerOnTerminate(Sender: TObject);
+    procedure scannerOnUpdateCount(fc: Integer; rc: Integer);
   public
     { public declarations }
   end;
@@ -112,6 +112,12 @@ begin
   Item.SubItems.Add(r.LineText);
 end;
 
+procedure TfrmMain.scannerOnUpdateCount(fc: Integer; rc: Integer);
+begin
+  StatusBar1.SimpleText := Format('Scanning %s: %d files scanned, %d results found',[scanner.CurrentPath, fc, rc]);
+  Application.ProcessMessages;
+end;
+
 procedure TfrmMain.scannerOnTerminate(Sender: TObject);
 begin
   showmessage('Done');
@@ -137,6 +143,7 @@ begin
   scanner.SetOptions(r);
   scanner.OnTextFound := @scannerOnTextFound;
   scanner.OnTerminate := @scannerOnTerminate;
+  scanner.OnUpdateCount := @scannerOnUpdateCount;
   scanner.Start;
 end;
 

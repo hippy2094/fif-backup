@@ -7,7 +7,7 @@ object frmMain: TfrmMain
   ClientHeight = 495
   ClientWidth = 828
   OnCreate = FormCreate
-  LCLVersion = '1.7'
+  LCLVersion = '1.9.0.0'
   object Panel1: TPanel
     Left = 0
     Height = 88
@@ -175,7 +175,7 @@ object frmMain: TfrmMain
   end
   object updateTimer: TTimer
     OnTimer = updateTimerTimer
-    left = 217
-    top = 164
+    left = 520
+    top = 40
   end
 end
