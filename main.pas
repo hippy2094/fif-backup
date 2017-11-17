@@ -15,11 +15,16 @@ type
   TfrmMain = class(TForm)
     btnGo: TButton;
     btnAbout: TButton;
+    btnStop: TButton;
     checkRecurse: TCheckBox;
     checkMatchCase: TCheckBox;
     checkWholeWords: TCheckBox;
     Label4: TLabel;
+    labelCurrentDir: TLabel;
+    labelFileCount: TLabel;
+    labelResultCount: TLabel;
     Panel2: TPanel;
+    panelProgress: TPanel;
     ScrollBox1: TScrollBox;
     textSearch: TComboBox;
     Label3: TLabel;
@@ -143,14 +148,18 @@ end;
 
 procedure TfrmMain.scannerOnUpdateCount(fc: Integer; rc: Integer);
 begin
-  StatusBar1.SimpleText := Format('Scanning %s: %d files scanned, %d results found',[scanner.CurrentPath, fc, rc]);
+  labelCurrentDir.Caption := scanner.CurrentPath;
+  labelFileCount.Caption := Format('%d files scanned',[fc]);
+  labelResultCount.Caption := Format('%d results found',[rc]);
+  //StatusBar1.SimpleText := Format('Scanning %s: %d files scanned, %d results found',[scanner.CurrentPath, fc, rc]);
   Application.ProcessMessages;
 end;
 
 procedure TfrmMain.scannerOnTerminate(Sender: TObject);
 begin
-  showmessage('Done');
+//  showmessage('Done');
 //  StatusBar1.SimpleText := IntToStr(listResults.Items.Count) + ' results';
+  panelProgress.Visible := true;
   textExt.Items.Add(textExt.Text);
   textSearch.Items.Add(textSearch.Text);
   SaveHistory;
@@ -182,6 +191,8 @@ var
   r: TScanOptions;
 begin
   StatusBar1.SimpleText := '';
+  panelProgress.Visible := true;
+  Application.ProcessMessages;
   scanner := TScanThread.Create(true);
   scanner.FreeOnTerminate := false;
   scanner.AddDirectory(textDir.Directory);

@@ -151,14 +151,58 @@ object frmMain: TfrmMain
     Height = 384
     Top = 88
     Width = 828
-    HorzScrollBar.Page = 1
-    VertScrollBar.Page = 1
+    HorzScrollBar.Page = 611
+    VertScrollBar.Page = 168
     Align = alClient
+    ClientHeight = 380
+    ClientWidth = 824
     TabOrder = 2
+    object panelProgress: TPanel
+      Left = 289
+      Height = 127
+      Top = 41
+      Width = 322
+      ClientHeight = 127
+      ClientWidth = 322
+      TabOrder = 0
+      Visible = False
+      object labelCurrentDir: TLabel
+        Left = 8
+        Height = 15
+        Top = 24
+        Width = 80
+        Caption = 'labelCurrentDir'
+        ParentColor = False
+      end
+      object labelFileCount: TLabel
+        Left = 8
+        Height = 15
+        Top = 40
+        Width = 76
+        Caption = 'labelFileCount'
+        ParentColor = False
+      end
+      object labelResultCount: TLabel
+        Left = 8
+        Height = 15
+        Top = 56
+        Width = 90
+        Caption = 'labelResultCount'
+        ParentColor = False
+      end
+      object btnStop: TButton
+        Left = 232
+        Height = 25
+        Top = 88
+        Width = 75
+        Caption = 'Stop'
+        TabOrder = 0
+      end
+    end
   end
   object updateTimer: TTimer
     OnTimer = updateTimerTimer
-    left = 520
-    top = 40
+    left = 744
+    top = 112
   end
 end
